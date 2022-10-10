@@ -1,0 +1,2 @@
+$path = Read-Host -Prompt "Please enter the path you want to find files larger than 200MB: (example: C:\bekho)"
+Get-ChildItem $path -recurse | Where-Object {$_.length -gt 200MB} | fl fullname,@{N='SizeInMb';E={$_.length/1mb}}
