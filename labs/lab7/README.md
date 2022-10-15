@@ -3,5 +3,5 @@
 #### First, let's install the module
 
 ```powershell
-PS> Install-Module -Name PSLogging
+Install-Module -Name PSLogging
 ```
