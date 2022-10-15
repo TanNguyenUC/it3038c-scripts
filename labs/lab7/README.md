@@ -3,5 +3,5 @@
 #### First, let's install the module
 
 ```
-Install-Module -Name PSLogging
+PS> Install-Module -Name PSLogging
 ```
