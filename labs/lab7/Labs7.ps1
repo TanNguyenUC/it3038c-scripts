@@ -12,11 +12,11 @@ if($files.Count -eq 2)
 Foreach($file in $files)
 {
     $filesize = $file.length
-    Write-Loginfo -LogPath C:\FileOver200MB.log -Message "Name: $file, Size: $filesize" -TimeStamp
+    Write-Loginfo -LogPath C:\FileOver2MB.log -Message "Name: $file, Size: $filesize" -TimeStamp
 }
 
 # Stop processing the log file confirmation and exit the script, the -Logpath value might be different
 $confirmation = Read-Host "Do you want to stop the log file? (Type Y to proceed)"
 if ($confirmation -eq 'Y') {
-    Stop-Log -LogPath C:\FileOver200MB.log -ToScreen
+    Stop-Log -LogPath C:\FileOver2MB.log -ToScreen
 }
