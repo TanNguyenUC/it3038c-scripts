@@ -24,22 +24,22 @@ if($files.Count -eq 2)
 ```
 
 
-Then, the script will log the fullname of files larger than 2MB to C:\FileOver200MB.log
+Then, the script will log the fullname of files larger than 2MB to C:\FileOver2MB.log.
 
 ```powershell
 Foreach($file in $files)
 {
     $filesize = $file.length
-    Write-Loginfo -LogPath C:\FileOver200MB.log -Message "Name: $file, Size: $filesize" -TimeStamp
+    Write-Loginfo -LogPath C:\FileOver2MB.log -Message "Name: $file, Size: $filesize" -TimeStamp
 }
 ```
 
 
-Lastly, the script ask users whether they want to stop processing the log files or not.
+Lastly, the script ask users whether they want to stop processing the log files or not. Type Y (the only option) to stop processing the log file. The ToScreen option will display the stop processing message to the console.
 
 ```powershell
 $confirmation = Read-Host "Do you want to stop the log file? (Type Y to proceed)"
 if ($confirmation -eq 'Y') {
-    Stop-Log -LogPath C:\FileOver200MB.log -ToScreen
+    Stop-Log -LogPath C:\FileOver2MB.log -ToScreen
 }
 ```
