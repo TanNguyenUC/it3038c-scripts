@@ -1,6 +1,7 @@
 import requests, re
 from bs4 import BeautifulSoup
 
+# This code will look the number of CVEs based on their score
 r = requests.get("https://www.cvedetails.com/").content
 soup = BeautifulSoup(r, 'html.parser')
 
