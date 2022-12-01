@@ -15,10 +15,9 @@ sources = wireshark_data["Source"].value_counts()
 destination = wireshark_data["Destination"].value_counts()
 src_count = pd.Series(sources, name = "Sources count")
 dst_count = pd.Series(destination, name = "Destination count")
-src_transfer = wireshark_data.groupby("Source").sum()["Length"]
-dst_transfer = wireshark_data.groupby("Destination").sum()["Length"]
-total_transfer = pd.Series(src_transfer + dst_transfer, name = "TotalBytes")
-
+src_transfer = wireshark_data.groupby("Source").sum()["Length"]/1048576
+dst_transfer = wireshark_data.groupby("Destination").sum()["Length"]/1048576
+total_transfer = pd.Series(src_transfer + dst_transfer, name = "TotalMegaBytes")
 def statistics(data):
     result = pd.concat([src_count,dst_count,total_transfer], axis=1)
     result.index.name = "IP"
@@ -36,7 +35,7 @@ def IdentifySuspect(Series):
 def TransferSuspect(Series):
     suspect = []
     for x,y in Series.items():
-            if y > 1:
+            if y > 2:
                 # print('IP: ', x, 'Transfer: ', y, 'MB')
                 suspect.append(x)
     return suspect
@@ -51,32 +50,18 @@ def SuspectGeo(suspect):
 
 def main():
     suspect = []
+    src_suspect = IdentifySuspect(src_count)
+    dst_suspect = IdentifySuspect(dst_count)
+    transfer_suspect = TransferSuspect(total_transfer)
+    suspect = src_suspect + dst_suspect + transfer_suspect
+    suspect = set(suspect)
     test = statistics(wireshark_data)
     print("\n" + "Statistical data of the file (including the IP, Sources Count, Destination Count, And Total transfer bytes:" + "\n")
     print(test)
-    src_suspect = IdentifySuspect(src_count)
-    dst_suspect = IdentifySuspect(dst_count)
-    suspect = src_suspect + dst_suspect
-    suspect = set(suspect)
-    print("\n" + "The suspect IP with 500 sources or destination count, or transfer total bytes larger than 1MB are:")
+    print("\n" + "The suspect IP with 500 sources or destination count, or transfer total bytes larger than 2MB are:")
     print(*suspect, sep=", ")
     print("\n" + "Country location of the suspect IPs:")
     for IP in suspect:
         SuspectGeo(IP)
-    
 if __name__ == "__main__":
     main()
-
-# network = nx.from_pandas_edgelist(wireshark_data, source='Source' , target='Destination', edge_key='protocol')
-# # suspect = "10.12.19.101"
-# pos = nx.spring_layout(network)
-# nx.draw(network, pos, node_color= "green",
-#     node_size = 300, with_labels = True)
-# options = {"node_size": 1000, "node_color":"r"}
-# nx.draw_networkx_nodes(network, pos, nodelist=[suspect], **options)
-
-# plt.show()
-
-# nx.draw_circular(network, with_labels = True)
-
-# wireshark_data.loc[wireshark_data['Source'] == suspect]
